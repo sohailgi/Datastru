@@ -1,67 +1,68 @@
 #include <iostream>
-#include <vector>
+using namespace std;
 
-using std::cout; using std::vector;
-using std::endl; using std::string;
+class BST {
+	int data;
+	BST *left, *right;
 
-struct TreeNode {
-    int key;
-    struct TreeNode *left{};
-    struct TreeNode *right{};
+public:
+	BST();
+
+	BST(int);
+
+	BST* Insert(BST*, int);
+
+	void Inorder(BST*);
 };
 
-void insertNode(TreeNode *&root, const int k) {
-    if (root == nullptr) {
-        root = new TreeNode;
-        root->key = k;
-        root->left = nullptr;
-        root->right = nullptr;
-    } else {
-        if (k < root->key)
-            insertNode(root->left, k);
-        else
-            insertNode(root->right, k);
-    }
+BST ::BST()
+	: data(0)
+	, left(NULL)
+	, right(NULL)
+{
 }
 
-TreeNode *findNode(TreeNode *root, const int k) {
-    if (root == nullptr)
-        return nullptr;
-
-    if (k == root->key)
-        return root;
-
-    if (k < root->key)
-        return findNode(root->left, k);
-    else
-        return findNode(root->right, k);
+BST ::BST(int value)
+{
+	data = value;
+	left = right = NULL;
 }
 
-void printTree(TreeNode *n) {
-    if (n != nullptr) {
-        printTree(n->left);
-        cout << n->key << "; ";
-        printTree(n->right);
-    }
+BST* BST ::Insert(BST* root, int value)
+{
+	if (!root) {
+		return new BST(value);
+	}
+
+	if (value > root->data) {
+		root->right = Insert(root->right, value);
+	}
+	else if (value < root->data){
+		root->left = Insert(root->left, value);
+	}
+	return root;
 }
 
-int main() {
-    std::vector<int> v1 {11, 23, 3, 5, 9, 15, 2, 20};
+void BST ::Inorder(BST* root)
+{
+	if (!root) {
+		return;
+	}
+	Inorder(root->left);
+	cout << root->data << endl;
+	Inorder(root->right);
+}
+int main()
+{
+	BST b, *root = NULL;
+	root = b.Insert(root, 50);
+	b.Insert(root, 30);
+	b.Insert(root, 20);
+	b.Insert(root, 40);
+	b.Insert(root, 70);
+	b.Insert(root, 60);
+	b.Insert(root, 80);
 
-    TreeNode *root = nullptr;
-
-    for (const auto &item : v1) {
-        insertNode(root, item);
-    }
-    printTree(root);
-    cout << endl;
-
-    std::vector<int> v2 {1, 22, 4, 16};
-    for (const auto &item : v2) {
-        insertNode(root, item);
-    }
-    printTree(root);
-    cout << endl;
-
-    return EXIT_SUCCESS;
+	b.Inorder(root);
+	return 0;
 }
